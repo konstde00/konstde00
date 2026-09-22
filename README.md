@@ -1,61 +1,68 @@
 ### Kostiantyn Dementiev
 
-Backend and platform engineer, about five years across software engineering and DevOps. Java
-and Spring Boot for services, Python for data work, on PostgreSQL, Snowflake, AWS and
-Kubernetes, with Terraform underneath and the CKA, CKAD and CKS certifications behind the
-Kubernetes part.
+Backend and platform engineer, five years across software engineering and DevOps, working from
+Kyiv, Ukraine. I use Java and Spring Boot for services, Python for data work, and run them on
+PostgreSQL, Snowflake, AWS and Kubernetes with Terraform underneath.
 
-Most of what I have built falls into two groups. Systems that many customers share without
-seeing each other, and the data platforms sitting underneath them. On one of those platforms
-the analytical side held more than 100 TB in Snowflake, and my work there was replication that
-keeps personal data out of the analytical copy, transformation and analysis in Python over the
-warehouse, and the access and cost questions that arrive with a lakehouse of that size.
+I hold nine cloud certifications: AWS Solutions Architect, Developer, SysOps Administrator and
+Security Specialty; HashiCorp Terraform Associate; Snowflake SnowPro Core; and all three
+Kubernetes certifications, CKA, CKAD and CKS.
 
-The two halves turn out to ask the same question. Multi-tenancy is about who may read what. So
-is a warehouse several teams query.
+For five years I owned the AWS platform behind a martech and digital-analytics SaaS serving
+enterprise customers, along with the Snowflake data platform underneath it. The analytical side
+held more than 100 TB. My work there was the replication that keeps personal data out of the
+analytical copy, transformation and analysis in Python over the warehouse, and the access and
+cost questions that arrive with a lakehouse of that size.
 
 ### Research
 
-I work on database-per-tenant multi-tenancy: adding a tenant to a running system, across every
-replica, without a restart. Four years on the same problem now, from a first modular
-decomposition to the artefact behind the papers.
+I work on **multi-tenancy**: how one running system serves many parties from separate databases,
+and what it takes to add a party to it without a restart and without anyone seeing anyone else's
+data. Four years on that single question, from a first modular decomposition to the artefact
+behind the papers, and all of it done from Ukraine alongside full-time engineering.
 
-The part that turned out to matter is that isolation failure under dynamic routing is silent.
-Replace the routing table while requests are in flight and one of them can come back from
-another tenant's database. Nothing throws, nothing logs. A green test suite says nothing about
-whether tenants stayed isolated while it ran, so half the work is finding a way to see the
-failure at all.
+The finding that reframed the work is that isolation failure under dynamic routing is silent.
+Replace the routing table while requests are in flight and one of them comes back from another
+tenant's database. Nothing throws, nothing logs, and the response is well formed. A passing test
+suite is therefore not evidence of isolation, because the failure needs a reader and a writer to
+interleave before it appears at all. Isolation under dynamic routing is a concurrency property,
+and only a concurrent test can observe it. Measuring it meant building a way to see it: 202 of
+4,000 requests served from the wrong database under one update discipline, zero under the other,
+with no error surfacing in either run.
 
-Lately I have been reading toward the other end of the same question: what you do when the data
-cannot be pooled in the first place, either because there is too much of it to move or because
-nobody is permitted to hold all of it. Distributed query engines, federated computation,
-privacy-preserving analysis over data that stays where it is.
+That question generalises in a direction I want to keep working in. When data cannot be pooled,
+because there is too much of it to move, or because no single party is permitted to hold all of
+it, the same problem returns as a design constraint rather than a bug: federated and
+privacy-preserving computation, distributed query engines, analysis over data that stays where
+it is. Who may read what, and how you demonstrate that the boundary held.
 
 ### Repositories
 
 [runtime-tenant-onboarding](https://github.com/konstde00/runtime-tenant-onboarding) is the
-artefact behind the papers: replica reconciliation, the benchmark harness, the Kubernetes
-deployment and the measurements.
+artefact behind the papers: replica reconciliation across ten replicas, the benchmark harness,
+the Kubernetes deployment and the measurements.
 [multitenancy_overview](https://github.com/konstde00/multitenancy_overview) is the earlier
 implementation they build on.
 
 [genetic-timetable-scheduler](https://github.com/konstde00/genetic-timetable-scheduler) solves
 university timetabling under hard constraints with a genetic algorithm.
-[number-theory-algorithms](https://github.com/konstde00/number-theory-algorithms) implements
-the arithmetic behind public-key cryptography from scratch.
+[number-theory-algorithms](https://github.com/konstde00/number-theory-algorithms) implements the
+arithmetic behind public-key cryptography from scratch.
 
 A design walkthrough of the multi-tenant architecture is on
 [Medium](https://medium.com/@konstde00/spring-boot-multi-tenant-architecture-overview-88198ea3991f).
 
 ### Upstream
 
-Two merged pull requests to [Redash](https://github.com/getredash/redash):
-[redash#7178](https://github.com/getredash/redash/pull/7178) and
-[website#775](https://github.com/getredash/website/pull/775), hardening Google OAuth for
-deployments behind a TLS-terminating load balancer. Flask sees only the plain HTTP hop from the
-proxy, so it built the redirect URI with an `http` scheme, and because Google matches redirect
-URIs exactly, sign-in broke. The change lets an operator pin the scheme the stack actually
-terminates on, keeping the authorisation redirect on https.
+Two merged pull requests to [Redash](https://github.com/getredash/redash), which has around 29k
+stars: [redash#7178](https://github.com/getredash/redash/pull/7178) and
+[website#775](https://github.com/getredash/website/pull/775). Both address how an identity
+survives a trust boundary. Behind a TLS-terminating load balancer, Flask sees only the plain
+HTTP hop from the proxy, so it built the Google OAuth redirect URI with an `http` scheme, and
+because Google matches redirect URIs exactly, sign-in broke. The fix lets an operator pin the
+scheme the stack actually terminates on, keeping the authorisation redirect on https rather than
+weakening the proxy until the identity provider accepts it. Carrying an identity intact across a
+boundary somebody else controls is the same concern as the research above, one layer out.
 
 ### Contact
 
