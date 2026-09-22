@@ -1,70 +1,59 @@
 ### Kostiantyn Dementiev
 
-Backend and platform engineer, five years across software engineering and DevOps, working from
-Kyiv, Ukraine. I use Java and Spring Boot for services, Python for data work, and run them on
-PostgreSQL, Snowflake, AWS and Kubernetes with Terraform underneath.
-
-I hold nine cloud certifications: AWS Solutions Architect, Developer, SysOps Administrator and
-Security Specialty; HashiCorp Terraform Associate; Snowflake SnowPro Core; and all three
-Kubernetes certifications, CKA, CKAD and CKS.
-
-For five years I owned the AWS platform behind a martech and digital-analytics SaaS serving
-enterprise customers, along with the Snowflake data platform underneath it. The analytical side
-held more than 100 TB. My work there was the replication that keeps personal data out of the
-analytical copy, transformation and analysis in Python over the warehouse, and the access and
-cost questions that arrive with a lakehouse of that size.
+I work on multi-tenant systems: how a system shared by many customers keeps their data apart,
+and how to show that it did. I'm a backend and platform engineer in Kyiv, Ukraine, with five
+years in industry, and for the past four years I've been doing this research independently.
 
 ### Research
 
-I work on **multi-tenancy**: how one running system serves many parties from separate databases,
-and what it takes to add a party to it without a restart and without anyone seeing anyone else's
-data. Four years on that single question, from a first modular decomposition to the artefact
-behind the papers, and all of it done from Ukraine alongside full-time engineering.
+I found that when tenants are added to a system while it is running, isolation can fail without
+leaving a trace. In my benchmark, rebuilding the routing table in place while requests were in
+flight sent 202 of 4,000 requests to the wrong database, and not one of them raised an error or
+wrote to the log. Replacing the table atomically, with no fallback, brought that to zero. The
+failure only shows up when a request and an update overlap, so a test suite that checks one
+tenant at a time can pass while isolation is broken. Much of the work since has gone into
+building tests that can catch it.
 
-The finding that reframed the work is that isolation failure under dynamic routing is silent.
-Replace the routing table while requests are in flight and one of them comes back from another
-tenant's database. Nothing throws, nothing logs, and the response is well formed. A passing test
-suite is therefore not evidence of isolation, because the failure needs a reader and a writer to
-interleave before it appears at all. Isolation under dynamic routing is a concurrency property,
-and only a concurrent test can observe it. Measuring it meant building a way to see it: 202 of
-4,000 requests served from the wrong database under one update discipline, zero under the other,
-with no error surfacing in either run.
+The question gets harder when the data can't be brought into one place at all, because there is
+too much of it or because nobody is allowed to hold all of it. That's where I'd like to take it
+next: federated and privacy-preserving computation, and analysis over data that stays where it
+lives.
 
-That question generalises in a direction I want to keep working in. When data cannot be pooled,
-because there is too much of it to move, or because no single party is permitted to hold all of
-it, the same problem returns as a design constraint rather than a bug: federated and
-privacy-preserving computation, distributed query engines, analysis over data that stays where
-it is. Who may read what, and how you demonstrate that the boundary held.
+### Engineering
+
+Most of my engineering has been on data platforms. At a digital-analytics SaaS serving
+enterprise customers I worked on the backend, the AWS infrastructure and a Snowflake platform
+that held more than 100 TB. On the data side that meant the replication that keeps personal data
+out of the analytical copy, and analysis over the warehouse in Python.
+
+I use Java and Spring Boot for services and Python for data, and deploy on AWS and Kubernetes
+with Terraform. I hold nine cloud certifications: AWS Solutions Architect, Developer, SysOps
+Administrator and Security Specialty, HashiCorp Terraform Associate, Snowflake SnowPro Core, and
+CKA, CKAD and CKS for Kubernetes.
+
+I also fixed a sign-in bug in [Redash](https://github.com/getredash/redash), the open-source BI
+tool, and the fix was merged upstream. Behind a TLS-terminating load balancer, Redash built its
+Google OAuth redirect with an `http` scheme, and because Google matches redirect URIs exactly,
+sign-in failed. The change lets an operator set the scheme the deployment actually uses
+([redash#7178](https://github.com/getredash/redash/pull/7178), documented in
+[website#775](https://github.com/getredash/website/pull/775)).
 
 ### Repositories
 
-[runtime-tenant-onboarding](https://github.com/konstde00/runtime-tenant-onboarding) is the
-artefact behind the papers: replica reconciliation across ten replicas, the benchmark harness,
-the Kubernetes deployment and the measurements.
-[multitenancy_overview](https://github.com/konstde00/multitenancy_overview) is the earlier
-implementation they build on.
+[runtime-tenant-onboarding](https://github.com/konstde00/runtime-tenant-onboarding) holds the
+implementation and the measurements behind the papers, including replica reconciliation and the
+benchmark harness. [multitenancy_overview](https://github.com/konstde00/multitenancy_overview)
+is the earlier version it grew from, with the design written up on
+[Medium](https://medium.com/@konstde00/spring-boot-multi-tenant-architecture-overview-88198ea3991f).
 
-[genetic-timetable-scheduler](https://github.com/konstde00/genetic-timetable-scheduler) solves
-university timetabling under hard constraints with a genetic algorithm.
+[genetic-timetable-scheduler](https://github.com/konstde00/genetic-timetable-scheduler) builds
+university timetables with a genetic algorithm under hard constraints.
 [number-theory-algorithms](https://github.com/konstde00/number-theory-algorithms) implements the
 arithmetic behind public-key cryptography from scratch.
 
-A design walkthrough of the multi-tenant architecture is on
-[Medium](https://medium.com/@konstde00/spring-boot-multi-tenant-architecture-overview-88198ea3991f).
+Away from research I built [Ty yak?](https://github.com/konstde00/ty_yak_fe), a check-in app for
+air raids and other emergencies: one person asks the people close to them whether they're safe,
+and each of them answers.
 
-### Upstream
-
-Two merged pull requests to [Redash](https://github.com/getredash/redash), which has around 29k
-stars: [redash#7178](https://github.com/getredash/redash/pull/7178) and
-[website#775](https://github.com/getredash/website/pull/775). Both address how an identity
-survives a trust boundary. Behind a TLS-terminating load balancer, Flask sees only the plain
-HTTP hop from the proxy, so it built the Google OAuth redirect URI with an `http` scheme, and
-because Google matches redirect URIs exactly, sign-in broke. The fix lets an operator pin the
-scheme the stack actually terminates on, keeping the authorisation redirect on https rather than
-weakening the proxy until the identity provider accepts it. Carrying an identity intact across a
-boundary somebody else controls is the same concern as the research above, one layer out.
-
-### Contact
-
-Faculty of Computer Science and Cybernetics, Taras Shevchenko National University of Kyiv.
+BSc in Computer Science, Taras Shevchenko National University of Kyiv ·
 ORCID [0009-0001-0795-1306](https://orcid.org/0009-0001-0795-1306) · konstde00@gmail.com
