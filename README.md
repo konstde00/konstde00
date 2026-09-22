@@ -21,22 +21,25 @@ lives.
 
 ### Engineering
 
-Most of my engineering has been on data platforms. At a digital-analytics SaaS serving
-enterprise customers I worked on the backend, the AWS infrastructure and a Snowflake platform
-that held more than 100 TB. On the data side that meant the replication that keeps personal data
-out of the analytical copy, and analysis over the warehouse in Python.
+Those five years have been at a digital-analytics SaaS serving enterprise customers, working
+across software engineering and DevOps: the backend services, the AWS platform they run on, and
+a Snowflake data platform holding more than 100 TB. On the data side that meant the replication
+that keeps personal data out of the analytical copy, and analysis over the warehouse in Python.
 
 I use Java and Spring Boot for services and Python for data, and deploy on AWS and Kubernetes
 with Terraform. I hold nine cloud certifications: AWS Solutions Architect, Developer, SysOps
 Administrator and Security Specialty, HashiCorp Terraform Associate, Snowflake SnowPro Core, and
 CKA, CKAD and CKS for Kubernetes.
 
-I also fixed a sign-in bug in [Redash](https://github.com/getredash/redash), the open-source BI
-tool, and the fix was merged upstream. Behind a TLS-terminating load balancer, Redash built its
-Google OAuth redirect with an `http` scheme, and because Google matches redirect URIs exactly,
-sign-in failed. The change lets an operator set the scheme the deployment actually uses
-([redash#7178](https://github.com/getredash/redash/pull/7178), documented in
-[website#775](https://github.com/getredash/website/pull/775)).
+### Open source
+
+I contribute to [Redash](https://github.com/getredash/redash), the open-source BI tool.
+[redash#7178](https://github.com/getredash/redash/pull/7178) fixed Google sign-in for
+deployments behind a TLS-terminating load balancer: Redash built the OAuth redirect with an
+`http` scheme, and because Google matches redirect URIs exactly, sign-in failed. The change lets
+an operator set the scheme the deployment actually uses, and
+[website#775](https://github.com/getredash/website/pull/775) documents it. Both are merged
+upstream.
 
 ### Repositories
 
