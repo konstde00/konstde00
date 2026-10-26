@@ -24,9 +24,11 @@ Smaller studies: [retry-storm-metastability](https://github.com/konstde00/retry-
 
 I run released artifacts of recent systems papers (150+ so far) and send fixes upstream when something breaks. Merged fixes include:
 
+- [Pie](https://github.com/pie-project/pie), a programmable LLM serving system: every session ran under the same name, so any client could list, attach to, or terminate other users' processes. PR [#1101](https://github.com/pie-project/pie/pull/1101)
 - [SREGym](https://github.com/SREGym/SREGym): three grading oracles accepted wrong fixes. PRs [#1107](https://github.com/SREGym/SREGym/pull/1107), [#1108](https://github.com/SREGym/SREGym/pull/1108), [#1109](https://github.com/SREGym/SREGym/pull/1109)
 - [ZMap](https://github.com/zmap/zmap) (6.4k stars): a single BACnet or DNS reply could end a whole scan. PRs [#984](https://github.com/zmap/zmap/pull/984), [#983](https://github.com/zmap/zmap/pull/983)
 - [PyHealth](https://github.com/sunlabuiuc/PyHealth) (1.7k stars): its cleanup deleted other jobs' temp folders. PR [#1296](https://github.com/sunlabuiuc/PyHealth/pull/1296)
+- [Cleaning the NTP Pool](https://github.com/Network-Security-Privacy-Research/Cleaning-the-NTP-Pool-artifacts), artifacts of a CCS 2026 paper: the IPv6 traceroute never probed the last hop limit. PR [#1](https://github.com/Network-Security-Privacy-Research/Cleaning-the-NTP-Pool-artifacts/pull/1)
 - [Redash](https://github.com/getredash/redash) (29k stars): Google sign-in behind a load balancer that terminates TLS. PR [#7178](https://github.com/getredash/redash/pull/7178)
 
 ## Industry
@@ -57,8 +59,7 @@ Five articles on [Medium](https://medium.com/@konstde00) (about 20,000 views) an
 
 Also vLLM, Hugging Face Transformers, PEFT, Snowflake, DuckDB, Amazon Athena, and CircleCI.
 
-<details>
-<summary><b>Certifications</b>: CKA, CKAD, CKS, AWS Security Specialty and 5 more</summary>
+## Certifications
 
 <p>
   <a href="https://www.credly.com/badges/67dc8c25-cab5-491d-8df3-29a46d333d15/public_url"><img src="https://images.credly.com/size/110x110/images/53acdae5-d69f-4dda-b650-d02ed7a50dd7/image.png" width="80" alt="AWS Certified Security Specialty"></a>
@@ -71,14 +72,6 @@ Also vLLM, Hugging Face Transformers, PEFT, Snowflake, DuckDB, Amazon Athena, an
   <a href="https://www.credly.com/badges/2f94381d-1f8c-48ef-89f1-77136f8e74c7/public_url"><img src="https://images.credly.com/images/0dc62494-dc94-469a-83af-e35309f27356/blob" width="80" alt="HashiCorp Certified: Terraform Associate"></a>
 </p>
 
-- AWS Certified Security Specialty, 2026
-- CKS: Certified Kubernetes Security Specialist, 2026
-- Snowflake SnowPro Core, 2026
-- CKA: Certified Kubernetes Administrator, 2025
-- CKAD: Certified Kubernetes Application Developer, 2025
-- AWS Certified Solutions Architect Associate, 2023
-- AWS Certified SysOps Administrator Associate, 2023
-- AWS Certified Developer Associate, 2023
-- HashiCorp Certified: Terraform Associate, 2023
-
-</details>
+- 2026: AWS Certified Security Specialty, Certified Kubernetes Security Specialist (CKS), Snowflake SnowPro Core
+- 2025: Certified Kubernetes Administrator (CKA), Certified Kubernetes Application Developer (CKAD)
+- 2023: AWS Certified Solutions Architect, SysOps Administrator and Developer Associate, HashiCorp Certified: Terraform Associate
