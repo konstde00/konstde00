@@ -8,74 +8,54 @@ I study tenant isolation in shared systems: when one tenant can read another's d
 
 ## Research
 
-The work began with database-per-tenant applications in my bachelor's thesis. It now covers multi-tenant LLM serving, where tenants share a base model and its prefix cache but use their own LoRA adapters.
+Right now I'm measuring whether the optimizations that make multi-LoRA serving cheap also open channels between tenants, and what each defense costs in throughput.
 
-Right now I'm measuring whether optimizations that make multi-adapter serving cheap also open channels between tenants: prefix-cache timing, batching interference, adapter memory left after eviction, and the scheduler's admission path. The goal is a ladder of defenses, each with a measured throughput cost, and an open test suite operators can run on their own deployments. The clinical case in point is when the tenants are separate hospitals, where even the topic of a query could be a disclosure.
+Manuscripts, single-author:
 
-### Manuscripts, single-author
-
-1. **Adapter Identity in Multi-Tenant LLM Serving**, in preparation. In 31 of the 32 vLLM releases I tested, same-named LoRA adapters of different tenants shared prefix-cache blocks, enough for an attacker to tell a victim's fine-tuning domain among 4 candidates 9 times out of 10. Keying the cache on a digest of the weights costs about 3% of throughput, against 66 to 79% for the usual fixes.
-2. **Runtime Tenant Onboarding in Database-per-Tenant Spring Boot Applications**, under review at IT&I 2026, Springer CCIS. The method adds tenants to a running system without restarts. On Kubernetes, all replicas converged in each of 160 provisioning runs, with a median of 419 ms at 3 replicas.
-3. **A Verification Protocol for Silent Tenant-Isolation Failures in Dynamically Routed Database-per-Tenant Applications**, under review at Advances in Cyber-Physical Systems. Replacing the routing table in place sent 939 of 120,000 lookups to the wrong tenant's database, and atomic replacement sent none of 1,215,000. The protocol caught all 12 mutants, the existing tests only 1.
-4. **Per-Tenant Connection Pools as TTL Caches**, under review at ACM SAC 2027. On minikube and Amazon EKS, the model predicts the mean of every pooler-free configuration to within 4%.
+1. **Adapter Identity in Multi-Tenant LLM Serving**, in preparation. In 31 of 32 vLLM releases, same-named LoRA adapters of different tenants shared prefix-cache blocks. Keying the cache on a digest of the weights costs about 3% of throughput.
+2. **Runtime Tenant Onboarding in Database-per-Tenant Spring Boot Applications**, under review at IT&I 2026, Springer CCIS. Adds tenants to a running system without restarts.
+3. **A Verification Protocol for Silent Tenant-Isolation Failures in Dynamically Routed Database-per-Tenant Applications**, under review at Advances in Cyber-Physical Systems. It caught all 12 mutants, and the existing tests caught only 1.
+4. **Per-Tenant Connection Pools as TTL Caches**, under review at ACM SAC 2027.
 
 Code for papers 2 to 4: [runtime-tenant-onboarding](https://github.com/konstde00/runtime-tenant-onboarding)<br>
 Smaller studies: [retry-storm-metastability](https://github.com/konstde00/retry-storm-metastability) · [observer-blur-coverage](https://github.com/konstde00/observer-blur-coverage)
 
-## Open source and research artifacts
+## Open source
 
-I run released artifacts of recent systems papers and send fixes upstream when something breaks, covering more than 150 papers so far. Merged fixes include:
+I run released artifacts of recent systems papers (150+ so far) and send fixes upstream when something breaks. Merged fixes include:
 
-- [SREGym](https://github.com/SREGym/SREGym), a benchmark of AI agents resolving production incidents: three grading oracles accepted wrong fixes, such as an image that never starts. PRs [#1107](https://github.com/SREGym/SREGym/pull/1107), [#1108](https://github.com/SREGym/SREGym/pull/1108), [#1109](https://github.com/SREGym/SREGym/pull/1109).
-- [ZMap](https://github.com/zmap/zmap), the Internet-wide scanner, 6.4k stars: a single BACnet or DNS reply could end a whole scan, and TCP option parsing could read past the captured packet. PRs [#984](https://github.com/zmap/zmap/pull/984), [#983](https://github.com/zmap/zmap/pull/983).
-- [PyHealth](https://github.com/sunlabuiuc/PyHealth), a deep learning toolkit for healthcare, 1.7k stars: its cleanup deleted other jobs' temp folders on a shared cache. PR [#1296](https://github.com/sunlabuiuc/PyHealth/pull/1296).
-- [Redash](https://github.com/getredash/redash), a BI tool with 29k stars: Google sign-in now works behind a load balancer that terminates TLS. PR [#7178](https://github.com/getredash/redash/pull/7178), docs in [website#775](https://github.com/getredash/website/pull/775).
+- [SREGym](https://github.com/SREGym/SREGym): three grading oracles accepted wrong fixes. PRs [#1107](https://github.com/SREGym/SREGym/pull/1107), [#1108](https://github.com/SREGym/SREGym/pull/1108), [#1109](https://github.com/SREGym/SREGym/pull/1109)
+- [ZMap](https://github.com/zmap/zmap) (6.4k stars): a single BACnet or DNS reply could end a whole scan. PRs [#984](https://github.com/zmap/zmap/pull/984), [#983](https://github.com/zmap/zmap/pull/983)
+- [PyHealth](https://github.com/sunlabuiuc/PyHealth) (1.7k stars): its cleanup deleted other jobs' temp folders. PR [#1296](https://github.com/sunlabuiuc/PyHealth/pull/1296)
+- [Redash](https://github.com/getredash/redash) (29k stars): Google sign-in behind a load balancer that terminates TLS. PR [#7178](https://github.com/getredash/redash/pull/7178)
 
 ## Industry
 
-Since 2022, I have been a backend and platform engineer at a digital-analytics SaaS auditing enterprise websites for analytics and privacy compliance, with 26 data-processing and reporting services and over 100 TB of data a year. I joined as a backend developer and took over most platform work in late 2023.
+Backend and platform engineer since 2022 at a digital analytics SaaS (26 data processing and reporting services, over 100 TB of data per year), doing most of its platform work since late 2023.
 
-- Found why tripling an enterprise tenant's concurrency limit from 10 to 30 left throughput flat: the scheduler admitted one audit per tenant per cycle. I proposed a bounded per-tenant admission rate.
-- Prototyped cross-customer isolation for the company's GitHub App, replaced long-lived CI keys with OIDC roles across about 30 repositories, and helped with SOC 2 hardening.
-- Co-designed consent-status resolution, so trackers that match no consent category are reported as uncategorized instead of silently getting the wrong status.
-- Traced a tenfold latency spike to connection-pool starvation; the fix cut the endpoint's CPU use by 34%. Reduced a 10-table query over about 10 TB from 21 s to 2.1 s.
-- Worked on the Snowflake lakehouse and replication that keeps personal data out of the analytical copy. Compacting 2.1 million small S3 files with Athena let a backfill that failed after 4 hours finish in about 6 minutes.
-- Moved 11 services from Rancher to ECS and Fargate, 11 Jenkins pipelines to CircleCI, retired Consul, moved Redis to ElastiCache without downtime, and cut AWS costs by 45% and incidents by over half.
-- Wrote over 40 design and research documents and mentored two junior developers.
+- Replaced long-lived CI keys with OIDC roles across about 30 repositories, prototyped cross-customer isolation for the company's GitHub App, and helped with security hardening for SOC 2.
+- Found why tripling a tenant's concurrency limit from 10 to 30 left throughput flat (one audit per tenant per scheduler cycle) and proposed a bounded per-tenant admission rate.
+- Moved 11 services from Rancher to ECS and Fargate and 11 Jenkins pipelines to CircleCI, cutting AWS costs by 45% and incidents by over half.
+- Benchmarked four ways to read 2.1 million small S3 files. Compacting them with Athena before loading into Snowflake let a backfill that had failed after 4 hours finish in about 6 minutes, and a K-means model of object sizes showed that deleting early beat lifecycle expiry for 97% of files.
+- Cut a 10-table query over about 10 TB from 21 s to 2.1 s.
 
-Recognition:
+Recognition: Product and Engineering Team Member of the Year 2025 (Ukraine), Operational Excellence Champion in 3 of 13 quarters, Take Accountability award 2024, "Most Impactful" at the company's 2023 AI hackathon for an AI grammar and spelling checker.
 
-- Product and Engineering Team Member of the Year 2025, Ukraine
-- Operational Excellence Champion in 3 of 13 quarters since Q3 2023, the most of any recipient
-- Take Accountability award 2024, a cultural-belief award, for migrating dozens of services off Rancher, Jenkins and Nexus
-- "Most Impactful" at the company's AI hackathon 2023
-
-I also founded OpsServing, a DevOps and cloud consultancy, in 2025. Before this job, I was a Java developer at Impltech from 2021 to 2022.
+Also founded OpsServing, a DevOps and cloud consultancy, in 2025. Java developer at Impltech, 2021-2022.
 
 ## Education
 
-**BSc in Computer Science**, Taras Shevchenko National University of Kyiv, 2025
-
-- One of the top 3 diploma marks in a group of 22 students
-- Thesis: *Methods for Building Distributed Multi-Tenant Applications with Spring Boot*, graded 95/100, supervised by Assoc. Prof. Oleksii M. Tkachenko
-- Term paper on runtime tenant onboarding, graded 99/100, supervised by Asst. Prof. Anton O. Svystunov
-- Courses: Software Specification and Verification Methods 95/100, Cloud Computing 97, Statistical Modeling in AI Problems 94, Distributed and Parallel Programming 91
-- 1st place in the KNU Student Mathematics Olympiad 2021, with 50 of 50 points
+**BSc in Computer Science**, Taras Shevchenko National University of Kyiv, 2025. One of the top 3 diploma marks in a group of 22 students, thesis graded 95/100. 1st place in the 2021 KNU Student Mathematics Olympiad.
 
 ## Writing and community
 
-- Five technical articles on [Medium](https://medium.com/@konstde00) with about 20,000 views, and one on DOU, Ukraine's largest developer community, with 3,000+ views
-- Volunteer DevOps engineer for Charity Hero, which distributes humanitarian aid in eastern Ukraine
-- Built [Ty yak?](https://github.com/konstde00/ty_yak_fe), a check-in app for air raids and other emergencies
+Five articles on [Medium](https://medium.com/@konstde00) (about 20,000 views) and one on DOU (3,000+ views). Volunteer DevOps engineer for Charity Hero. Built [Ty yak?](https://github.com/konstde00/ty_yak_fe), a check-in app for air raids and other emergencies.
 
 ## Stack
 
 <img src="https://skillicons.dev/icons?i=python,java,spring,scala,pytorch,kubernetes,aws,terraform,docker,postgres,kafka,githubactions&perline=12" alt="Python, Java, Spring, Scala, PyTorch, Kubernetes, AWS, Terraform, Docker, PostgreSQL, Kafka, GitHub Actions">
 
-- **Languages:** Python, Java with Spring Boot, Scala, SQL, Bash
-- **ML systems:** PyTorch, Hugging Face Transformers, PEFT for LoRA fine-tuning, vLLM for multi-LoRA serving
-- **Data:** Snowflake, Kafka, PostgreSQL, DuckDB, Amazon Athena
-- **Infrastructure:** AWS, Kubernetes, Terraform, Docker, CircleCI, GitHub Actions
+Also vLLM, Hugging Face Transformers, PEFT, Snowflake, DuckDB, Amazon Athena, and CircleCI.
 
 <details>
 <summary><b>Certifications</b>: CKA, CKAD, CKS, AWS Security Specialty and 5 more</summary>
