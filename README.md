@@ -1,10 +1,10 @@
 # Kostiantyn Dementiev
 
-**Systems researcher and platform engineer**
+**Systems researcher and senior platform engineer**
 
 I study tenant isolation in shared systems: when one tenant can read another's data, how to test for it, and what correct isolation costs.
 
-[ORCID](https://orcid.org/0009-0001-0795-1306) · [LinkedIn](https://www.linkedin.com/in/kostiantyn-dementiev-699786223/) · [Medium](https://medium.com/@konstde00) · [Credly](https://www.credly.com/users/kostiantyn-dementiev) · [konstde00@gmail.com](mailto:konstde00@gmail.com)
+[Website](https://konstde00.github.io/) · [CV](https://konstde00.github.io/data/CV_Dementiev.pdf) · [ORCID](https://orcid.org/0009-0001-0795-1306) · [LinkedIn](https://www.linkedin.com/in/kostiantyn-dementiev-699786223/) · [Medium](https://medium.com/@konstde00) · [Credly](https://www.credly.com/users/kostiantyn-dementiev) · [konstde00@gmail.com](mailto:konstde00@gmail.com)
 
 ## Research
 
@@ -24,30 +24,40 @@ Smaller studies: [retry-storm-metastability](https://github.com/konstde00/retry-
 
 I run released artifacts of recent systems papers (150+ so far) and send fixes upstream when something breaks. Merged fixes include:
 
-- [Pie](https://github.com/pie-project/pie), a programmable LLM serving system: every session ran under the same name, so any client could list, attach to, or terminate other users' processes. PR [#1101](https://github.com/pie-project/pie/pull/1101)
+- [Pie](https://github.com/pie-project/pie), a programmable LLM serving system: every session ran under the same name, so any client could list, attach to, or terminate other users' processes. PRs [#1101](https://github.com/pie-project/pie/pull/1101), [#1100](https://github.com/pie-project/pie/pull/1100)
 - [SREGym](https://github.com/SREGym/SREGym): three grading oracles accepted wrong fixes. PRs [#1107](https://github.com/SREGym/SREGym/pull/1107), [#1108](https://github.com/SREGym/SREGym/pull/1108), [#1109](https://github.com/SREGym/SREGym/pull/1109)
 - [ZMap](https://github.com/zmap/zmap) (6.4k stars): a single BACnet or DNS reply could end a whole scan. PRs [#984](https://github.com/zmap/zmap/pull/984), [#983](https://github.com/zmap/zmap/pull/983)
 - [PyHealth](https://github.com/sunlabuiuc/PyHealth) (1.7k stars): its cleanup deleted other jobs' temp folders. PR [#1296](https://github.com/sunlabuiuc/PyHealth/pull/1296)
 - [Cleaning the NTP Pool](https://github.com/Network-Security-Privacy-Research/Cleaning-the-NTP-Pool-artifacts), artifacts of a CCS 2026 paper: the IPv6 traceroute never probed the last hop limit. PR [#1](https://github.com/Network-Security-Privacy-Research/Cleaning-the-NTP-Pool-artifacts/pull/1)
-- [Redash](https://github.com/getredash/redash) (29k stars): Google sign-in behind a load balancer that terminates TLS. PR [#7178](https://github.com/getredash/redash/pull/7178)
+- [Redash](https://github.com/getredash/redash) (29k stars): Google sign-in behind a load balancer that terminates TLS. PR [#7178](https://github.com/getredash/redash/pull/7178), docs in [website#775](https://github.com/getredash/website/pull/775)
 
 ## Industry
 
-Backend and platform engineer since 2022 at a digital analytics SaaS (26 data processing and reporting services, over 100 TB of data per year), doing most of its platform work since late 2023.
+Backend and platform engineer since 2022 at a digital analytics SaaS that audits enterprise websites for analytics and privacy compliance (26 data processing and reporting services, over 100 TB of data per year). I joined as a backend developer and took over most of the platform work in late 2023.
 
-- Replaced long-lived CI keys with OIDC roles across about 30 repositories, prototyped cross-customer isolation for the company's GitHub App, and helped with security hardening for SOC 2.
-- Found why tripling a tenant's concurrency limit from 10 to 30 left throughput flat (one audit per tenant per scheduler cycle) and proposed a bounded per-tenant admission rate.
-- Moved 11 services from Rancher to ECS and Fargate and 11 Jenkins pipelines to CircleCI, cutting AWS costs by 45% and incidents by over half.
+- Led the design of components in the data pipeline that processes over 100 TB a year, and worked on the Snowflake lakehouse and the replication that keeps personal data out of the analytical copy.
 - Benchmarked four ways to read 2.1 million small S3 files. Compacting them with Athena before loading into Snowflake let a backfill that had failed after 4 hours finish in about 6 minutes, and a K-means model of object sizes showed that deleting early beat lifecycle expiry for 97% of files.
-- Cut a 10-table query over about 10 TB from 21 s to 2.1 s.
+- Traced recurring Step Functions failures in a production data-deletion pipeline to memory-starved containers that let task tokens expire, and rolled the fix out to 9 services.
+- Co-designed consent-status resolution for the privacy-compliance product. Trackers that matched no consent category were silently given the wrong status, and one shared SQL function now reports them as uncategorized.
+- Found why tripling a tenant's concurrency limit from 10 to 30 left throughput flat (one audit per tenant per scheduler cycle) and proposed a bounded per-tenant admission rate.
+- Traced a tenfold latency spike at double the request rate to connection-pool starvation, and the fix cut the endpoint's CPU use by 34%. Cut an enterprise report page's load time from 17 s to under 2 s, and a 10-table query over about 10 TB from 21 s to 2.1 s.
+- Replaced long-lived CI keys with OIDC roles across about 30 repositories, prototyped cross-customer isolation for the company's GitHub App (an installation is accepted only if the organization owns it and the user administers it), and helped with security hardening for SOC 2.
+- Led the platform modernization: 11 services moved from Rancher to ECS and Fargate, 11 Jenkins pipelines to CircleCI, Consul retired across 8 services, and Redis moved to ElastiCache without downtime. AWS costs fell by 45% and incidents by over half.
+- Wrote about 20 design documents, have led weekly incident reviews for the reporting services since 2023, and mentored two junior developers.
 
-Recognition: Product and Engineering Team Member of the Year 2025 (Ukraine), Operational Excellence Champion in 3 of 13 quarters, Take Accountability award 2024, "Most Impactful" at the company's 2023 AI hackathon for an AI grammar and spelling checker.
+I also founded [OpsServing](https://www.opsserving.com/), a DevOps and cloud consultancy, in 2025. Before that, I was a Java developer at Impltech (2021-2022).
 
-Also founded OpsServing, a DevOps and cloud consultancy, in 2025. Java developer at Impltech, 2021-2022.
+## Honors
+
+- Product and Engineering Team Member of the Year 2025, Ukraine
+- Operational Excellence Champion in 3 of 13 quarters since Q3 2023, the most of any recipient
+- Take Accountability award 2024, for the Rancher, Jenkins and Nexus migrations
+- "Most Impactful" at the company's AI hackathon 2023, for an AI grammar and spelling checker
+- 1st place in the 2021 KNU Student Mathematics Olympiad, with 50 of 50 points
 
 ## Education
 
-**BSc in Computer Science**, Taras Shevchenko National University of Kyiv, 2025. One of the top 3 diploma marks in a group of 22 students, thesis graded 95/100. 1st place in the 2021 KNU Student Mathematics Olympiad.
+**BSc in Computer Science**, Taras Shevchenko National University of Kyiv, 2025. One of the top 3 diploma marks in a group of 22 students, thesis graded 95/100.
 
 ## Writing and community
 
