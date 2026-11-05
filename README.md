@@ -2,9 +2,11 @@
 
 **Systems researcher and senior platform engineer**
 
-I study tenant isolation in shared systems: when one tenant can read another's data, how to test for it, and what correct isolation costs.
+## Interests
 
-[Website](https://konstde00.github.io/) · [CV](https://konstde00.github.io/data/CV_Dementiev.pdf) · [ORCID](https://orcid.org/0009-0001-0795-1306) · [LinkedIn](https://www.linkedin.com/in/kostiantyn-dementiev-699786223/) · [Medium](https://medium.com/@konstde00) · [Credly](https://www.credly.com/users/kostiantyn-dementiev) · [konstde00@gmail.com](mailto:konstde00@gmail.com)
+- Systems and cloud security
+- Isolation between tenants on shared infrastructure, most recently in LLM serving, where I found cross-tenant cache issues in vLLM
+- Security of health and biotech systems
 
 ## Research
 
@@ -85,3 +87,7 @@ Also vLLM, Hugging Face Transformers, PEFT, Snowflake, DuckDB, Amazon Athena, an
 - 2026: AWS Certified Security Specialty, Certified Kubernetes Security Specialist (CKS), Snowflake SnowPro Core
 - 2025: Certified Kubernetes Administrator (CKA), Certified Kubernetes Application Developer (CKAD)
 - 2023: AWS Certified Solutions Architect, SysOps Administrator and Developer Associate, HashiCorp Certified: Terraform Associate
+
+## Contact
+
+[Website](https://konstde00.github.io/) · [CV](https://konstde00.github.io/data/CV_Dementiev.pdf) · [ORCID](https://orcid.org/0009-0001-0795-1306) · [LinkedIn](https://www.linkedin.com/in/kostiantyn-dementiev-699786223/) · [Medium](https://medium.com/@konstde00) · [Credly](https://www.credly.com/users/kostiantyn-dementiev) · [konstde00@gmail.com](mailto:konstde00@gmail.com)
